@@ -6,11 +6,11 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/1 Start Scene.unity
-    guid: 99c9720ab356a0642a771bea13969a05
+    path: Assets/Scenes/MainMenu.unity
+    guid: 209f8d227e010094986b9c3f7781e0c7
   - enabled: 1
-    path: Assets/AHProxy/PlanetShader/DemoScene/DemoScene.unity
-    guid: 4d95ba533d773d140bb3d8f54c5ec072
+    path: Assets/Scenes/DemoScene.unity
+    guid: 2ff64d7dbd68f0b49897b39860424958
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 11da5eaac63e32445997344f4e172ee5, type: 2}
     com.unity.xr.arfoundation.simulation_settings: {fileID: 11400000, guid: 9a8b9bfc6d4bac0439843bbe5c8ac3b0, type: 2}
