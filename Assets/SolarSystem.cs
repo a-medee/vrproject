@@ -4,65 +4,83 @@ using UnityEngine;
 
 public class SolarSystem : MonoBehaviour
 {
-	readonly float G = 100f;
-	GameObject[] celestials;
-	float time_done = 0;
-	// Start is called before the first frame update
-	void Start()
-	{
-	    celestials = GameObject.FindGameObjectsWithTag("Celestial");
+    readonly float G = 100f;
+    GameObject[] celestials;
+    GameObject centralObject;
+    float timer = 0f;
+    bool isFalling = false;
 
-	    SetInitialVelocity();
-	}
-
-	// Update is called once per frame
-	void Update()
-	{
-	}
-
-	void FixedUpdate()
-	{
-		Gravity();
-	}
-
-	void SetInitialVelocity()
+    void Start()
     {
-        foreach (GameObject a in celestials)
+        // Find the central object with the "StillAndNotFall" tag
+        centralObject = GameObject.FindGameObjectWithTag("DoNot");
+
+        // Find all celestial objects with the "Celestial" tag
+        celestials = GameObject.FindGameObjectsWithTag("Celestial");
+
+        SetInitialVelocity();
+    }
+
+    void Update()
+    {
+        timer += Time.deltaTime;
+
+        // Check if 20 seconds have passed
+        if (timer >= 20f && !isFalling)
         {
-            foreach (GameObject b in celestials)
-            {
-                if(!a.Equals(b))
-                {
-                    float m2 = b.GetComponent<Rigidbody>().mass;
-                    float r = Vector3.Distance(a.transform.position, b.transform.position);
-
-                    a.transform.LookAt(b.transform);
-		    a.GetComponent<Rigidbody>().velocity += a.transform.right * Mathf.Sqrt((G * m2) / r);
-
-		}
-            }
+            StartFalling();
+            isFalling = true;
         }
     }
 
-	void Gravity()
-	{
-		foreach (GameObject a in celestials)
-		{
-			foreach (GameObject b in celestials)
-			{
-				if (!a.Equals(b))
-				{
-					float m1 = a.GetComponent<Rigidbody>().mass;
-					float m2 = b.GetComponent<Rigidbody>().mass;
-					float r = Vector3.Distance(a.transform.position, b.transform.position);
+    void FixedUpdate()
+    {
+        if (!isFalling)
+        {
+            ApplyGravityToCelestials();
+        }
+    }
 
-					a.GetComponent<Rigidbody>().AddForce((b.transform.position - a.transform.position).normalized * (G * (m1 * m2) / (r * r)));
-					if ( i == 10)
-						
-				}
-			}
-		}
-	}
+    void SetInitialVelocity()
+    {
+        // Apply initial velocity to make celestial objects revolve around the central object
+        foreach (GameObject a in celestials)
+        {
+            float m2 = centralObject.GetComponent<Rigidbody>().mass;
+            float r = Vector3.Distance(a.transform.position, centralObject.transform.position);
 
+            a.transform.LookAt(centralObject.transform);
+            a.GetComponent<Rigidbody>().velocity += a.transform.right * Mathf.Sqrt((G * m2) / r);
+        }
+    }
 
+    void ApplyGravityToCelestials()
+    {
+        // Apply gravity from the central object to each celestial object
+        foreach (GameObject a in celestials)
+        {
+            float m1 = a.GetComponent<Rigidbody>().mass;
+            float m2 = centralObject.GetComponent<Rigidbody>().mass;
+            float r = Vector3.Distance(a.transform.position, centralObject.transform.position);
+
+            // Calculate the gravitational force towards the central object
+            Vector3 forceDirection = (centralObject.transform.position - a.transform.position).normalized;
+            Vector3 gravityForce = forceDirection * (G * (m1 * m2) / (r * r));
+
+            a.GetComponent<Rigidbody>().AddForce(gravityForce);
+        }
+    }
+
+    void StartFalling()
+    {
+        // Stop the custom gravitational force and enable downward fall
+        foreach (GameObject a in celestials)
+        {
+            Rigidbody rb = a.GetComponent<Rigidbody>();
+
+            // Reset velocity and enable Unity's gravity
+            rb.velocity = Vector3.zero;
+            rb.useGravity = true;
+        }
+    }
 }
