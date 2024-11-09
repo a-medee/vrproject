@@ -100,24 +100,4 @@ void SetInitialVelocity()
         // Enable gravity to make the object fall
         rb.useGravity = true; // This will apply downward force due to gravity
     }
-
-
-    // This script will be attached to each celestial object (everyday item)
-// for handling collision with the flat surface
-
-    void OnCollisionEnter(Collision collision)
-    {
-        // Check if the celestial object collides with the "FlatGround"
-        if (collision.gameObject.CompareTag("Sol"))
-        {
-            Rigidbody rb = GetComponent<Rigidbody>();
-
-            // Stop all movement when it hits the ground
-            rb.velocity = Vector3.zero;
-
-            // Disable gravity (it’s now on the ground)
-            rb.useGravity = false;
-        }
-    }
-
 }
