@@ -18,9 +18,9 @@ public class SolarSystem : MonoBehaviour
 
         // Set initial velocity to make celestial objects orbit around the central object
         SetInitialVelocity();
-
         // Start the coroutine to make celestial objects fall sequentially onto the "FlatGround"
-        StartCoroutine(SequentialFall());
+
+	StartCoroutine(SequentialFall());
     }
 
     void FixedUpdate()
@@ -34,6 +34,10 @@ void SetInitialVelocity()
     foreach (GameObject a in celestials)
     {
         Rigidbody rb = a.GetComponent<Rigidbody>();
+
+        // Disable gravity initially to avoid falling immediately
+        rb.useGravity = false;
+
         Vector3 directionToCentralObject = (centralObject.transform.position - a.transform.position).normalized;
 
         float r = Vector3.Distance(a.transform.position, centralObject.transform.position);
@@ -41,7 +45,6 @@ void SetInitialVelocity()
         float orbitalSpeed = Mathf.Sqrt(G * m2 / r);
 
         Vector3 orbitalVelocity = Vector3.Cross(directionToCentralObject, Vector3.up).normalized * orbitalSpeed;
-
 
         rb.velocity = orbitalVelocity;
     }
@@ -76,6 +79,7 @@ void SetInitialVelocity()
     IEnumerator SequentialFall()
     {
         // Sequentially make celestial objects fall onto the ground
+	    yield return new WaitForSeconds(20f);
         foreach (GameObject celestial in celestials)
         {
             // Make the current celestial object start falling
