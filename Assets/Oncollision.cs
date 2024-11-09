@@ -15,19 +15,15 @@ public class Oncollision : MonoBehaviour
     {
         
     }
-
-
     void OnCollisionEnter(Collision collision)
     {
-        // Stop falling when hitting the ground
         if (collision.gameObject.CompareTag("Sol"))
         {
             Rigidbody rb = GetComponent<Rigidbody>();
 
-            // Stop movement and disable gravity
+            // Stop movement and disable gravity when hitting the ground
             rb.velocity = Vector3.zero;
             rb.useGravity = false;
         }
-    
-	}
+    }
 }
