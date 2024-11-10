@@ -7,6 +7,8 @@ TagManager:
   - Celestial
   - Sol
   - DoNot
+  - Bin
+  - OpenBin
   layers:
   - Default
   - TransparentFX
