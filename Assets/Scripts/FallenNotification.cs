@@ -10,7 +10,7 @@ public class FallenNotification : MonoBehaviour
 
 	private void Start()
 	{
-		notificationTextTMP.text = "Welcome";
+		notificationTextTMP.text = "Bienvenu, un object va bientôt tomber";
 		notification = FindObjectOfType<FallenNotification>();
 	}
 

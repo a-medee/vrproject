@@ -15,40 +15,29 @@ public class FaiCol : MonoBehaviour
         notification = FindObjectOfType<FallenNotification>();
         grabInteractable = GetComponent<XRGrabInteractable>();
         rb = GetComponent<Rigidbody>();
-
-        // Ensure AudioSource component is not null
-        if (audioSource == null)
-        {
-            Debug.LogWarning("AudioSource not found on ground object. Make sure the ground has an AudioSource component.");
-        }
-
-        // Register grab events
         grabInteractable.selectEntered.AddListener(OnGrabbed);
         grabInteractable.selectExited.AddListener(OnReleased);
     }
 
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Sol")) // Ground object
+        if (collision.gameObject.CompareTag("Sol"))
         {
-            // Play collision sound and show notification
             if (audioSource != null && collisionSound != null)
             {
                 audioSource.PlayOneShot(collisionSound);
             }
-            notification?.ShowNotification("A celestial object has fallen!");
+            notification?.ShowNotification("Un objet vient de tomber!");
         }
     }
 
     private void OnGrabbed(SelectEnterEventArgs args)
     {
-        // Stop physics and make it easier to carry
         rb.isKinematic = true;
     }
 
     private void OnReleased(SelectExitEventArgs args)
     {
-        // Re-enable physics when dropped
         rb.isKinematic = false;
         rb.useGravity = true;
     }

@@ -3,9 +3,8 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 public class FocusAndGrab : MonoBehaviour
 {
-    public Transform cameraTransform;  // Assign your main camera here
-
-    private Transform originalParent;
+	public Transform cameraTransform;
+	private Transform originalParent;
 
     private void OnEnable()
     {
@@ -23,16 +22,13 @@ public class FocusAndGrab : MonoBehaviour
 
     private void OnGrab(SelectEnterEventArgs args)
     {
-        // Store the object's original parent so we can restore it on release
         originalParent = transform.parent;
 
-        // Parent the object to the camera
-        transform.SetParent(cameraTransform, true); // 'true' keeps the object in its current position relative to the camera
+        transform.SetParent(cameraTransform, true);
     }
 
     private void OnRelease(SelectExitEventArgs args)
     {
-        // Restore the object's original parent
-        transform.SetParent(originalParent, true);
+            transform.SetParent(originalParent, true);
     }
 }
