@@ -25,9 +25,17 @@ public class SolarSystem : MonoBehaviour
 
     void FixedUpdate()
     {
-        // Keep celestial objects orbiting the central object if they are not falling
-        ApplyGravityToCelestials();
+	    // Remove destroyed celestial objects from the array to prevent accessing null references
+	    celestials = System.Array.FindAll(celestials, celestial => celestial != null);
+
+	    // Apply gravity to celestial objects
+	    ApplyGravityToCelestials();
     }
+    // void FixedUpdate()
+    // {
+    //     // Keep celestial objects orbiting the central object if they are not falling
+    //     ApplyGravityToCelestials();
+    // }
 
 void SetInitialVelocity()
 {
@@ -55,7 +63,9 @@ void SetInitialVelocity()
         // Apply gravitational force from the central object to each celestial object
         foreach (GameObject a in celestials)
         {
+		if (a == null) continue;
             Rigidbody rb = a.GetComponent<Rigidbody>();
+	    if (rb == null) continue;
             if (rb.useGravity == false) // Only apply gravity if it's not already falling
             {
                 // Mass of the celestial object
@@ -79,7 +89,7 @@ void SetInitialVelocity()
     IEnumerator SequentialFall()
     {
         // Sequentially make celestial objects fall onto the ground
-	    yield return new WaitForSeconds(20f);
+//	    yield return new WaitForSeconds(20f);
         foreach (GameObject celestial in celestials)
         {
             // Make the current celestial object start falling
